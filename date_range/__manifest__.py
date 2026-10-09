@@ -20,6 +20,9 @@
         "web.assets_backend": [
             "date_range/static/src/js/*",
         ],
+        "web.assets_tests": [
+            "date_range/static/tests/tours/*",
+        ],
     },
     "development_status": "Mature",
     "maintainers": ["lmignon"],
