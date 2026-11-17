@@ -9,10 +9,10 @@
     "author": "ACSONE SA/NV, Odoo Community Association (OCA)",
     "license": "LGPL-3",
     "installable": True,
-    "depends": ["web", "web_tour", "bus"],
+    "depends": ["web"],
     "data": [
-        "data/ir_cron_data.xml",
         "security/ir.access.csv",
+        "data/ir_cron_data.xml",
         "views/date_range_view.xml",
         "wizard/date_range_generator.xml",
     ],
@@ -20,8 +20,8 @@
         "web.assets_backend": [
             "date_range/static/src/js/*",
         ],
-        "web.assets_tests": [
-            "date_range/static/tests/tours/*",
+        "web.assets_unit_tests": [
+            "date_range/static/tests/**/*.test.js",
         ],
     },
     "development_status": "Mature",

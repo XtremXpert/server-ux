@@ -54,14 +54,11 @@ class DateRangeSearchMixin(models.AbstractModel):
             ranges = self.env["date.range"].search([("id", sub_op, value)])
         if not ranges:
             return Domain.FALSE
-        domain = (len(ranges) - 1) * ["|"]
-        for date_range in ranges:
-            domain += [
-                "&",
-                (self._date_range_search_field, ">=", date_range.date_start),
-                (self._date_range_search_field, "<=", date_range.date_end),
-            ]
-        return domain
+        return Domain.OR(
+            Domain(self._date_range_search_field, ">=", date_range.date_start)
+            & Domain(self._date_range_search_field, "<=", date_range.date_end)
+            for date_range in ranges
+        )
 
     @api.model
     def get_view(self, view_id=None, view_type="form", **options):

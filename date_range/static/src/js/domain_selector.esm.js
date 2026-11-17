@@ -1,29 +1,26 @@
 import {domainFromTreeDateRange, treeFromDomainDateRange} from "./condition_tree.esm";
 
-import {onWillStart} from "@odoo/owl";
+import {providePlugins, usePlugin} from "@odoo/owl";
+import {DateRangePlugin} from "./date_range_plugin.esm";
 import {Domain} from "@web/core/domain";
 import {DomainSelector} from "@web/core/domain_selector/domain_selector";
-import {useService} from "@web/core/utils/hooks";
 import {patch} from "@web/core/utils/patch";
-import {useSubEnv} from "@web/owl2/utils";
 
 const ARCHIVED_DOMAIN = `[("active", "in", [True, False])]`;
 
 patch(DomainSelector.prototype, {
     setup() {
         super.setup();
-        this.orm = useService("orm");
-        this.dateRanges = [];
-        this.dateRangeTypes = [];
-        useSubEnv({domain: this});
-        onWillStart(async () => {
-            this.dateRanges = await this.orm.call("date.range", "search_read", []);
-            this.dateRangeTypes = await this.orm.call(
-                "date.range.type",
-                "search_read",
-                []
-            );
-        });
+        providePlugins([DateRangePlugin]);
+        this.dateRangePlugin = usePlugin(DateRangePlugin);
+    },
+
+    get dateRanges() {
+        return this.dateRangePlugin.dateRanges;
+    },
+
+    get dateRangeTypes() {
+        return this.dateRangePlugin.dateRangeTypes;
     },
 
     async onPropsUpdated(p) {

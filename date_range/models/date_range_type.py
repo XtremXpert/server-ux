@@ -143,10 +143,8 @@ class DateRangeType(models.Model):
                     continue
                 with self.env.cr.savepoint():
                     wizard.action_apply(batch=True)
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 logger.warning(
-                    "Error autogenerating ranges for date range type %s: %s",
-                    dr_type.name,
-                    e,
-                    exc_info=True,
+                    f"Error autogenerating ranges for date range type "
+                    f"{dr_type.name}: {e}"
                 )
